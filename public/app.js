@@ -4,16 +4,12 @@ $.getJSON("/articles", function(data) {
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
     $("#articles").append('<div class="card bg-success"><div class="card-header"><p data-id='+ data[i]._id +'>'+ data[i].title +'</p></div><div class="card-body">'+ data[i].link +'</div></div><br>')
-    
-    // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
   }
 });
 
 
-
-
-// Whenever someone clicks a p tag
 $(document).on("click", "p", function() {
+  
   // Empty the notes from the note section
   $("#comments").empty();
   $("#old-comments").empty();
@@ -30,22 +26,32 @@ $(document).on("click", "p", function() {
   })
     // With that done, add the note information to the page
     .then(function(data) {
-      console.log(data);
+      
       
       // The title of the article
-      $("#comments").append("<h3>" + data.title + " <br>Comments</h3>");
+      $("#comments").append("<h3>" + data[0].title + " <br>Comments</h3>");
       // A textarea to add a new note body
-      $("#new-comment").append("<textarea id='bodyinput' name='body'></textarea>");
-      // A button to submit a new note, with the id of the article saved to it
-      $("#new-comment").append("<button data-id='" + data._id + "' id='savenote'>Add Comment</button>");
+      $("#new-comment").append("<textarea id='authorinput' name='body'>Your Name</textarea><br>");
+      $("#new-comment").append("<textarea id='bodyinput' name='body'>Comment</textarea><br>");
 
-      // If there's a note in the article
-      if (data.note) {
-        // Place the body of the note in the body textarea
-        $("#old-comments").val(data.note.body);
-      }
+      // A button to submit a new note, with the id of the article saved to it
+      $("#new-comment").append("<button type='button' class='btn btn-warning' data-id='" + data[0]._id + "' id='savenote'>Add Comment</button>");
+
+      $.ajax({
+        method: "GET",
+        url: "/comment/" + thisId
+      })
+        // With that done, add the note information to the page
+        .then(function(data) {
+          
+          for (x = 0; x < data.length; x++) {
+            $("#old-comments").append('<br>' + data[x].author + ' said ' + data[x].body);
+          }
+      });
     });
-});
+
+  });
+
 
 // When you click the savenote button
 $(document).on("click", "#savenote", function() {
@@ -55,21 +61,25 @@ $(document).on("click", "#savenote", function() {
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
-    url: "/articles/" + thisId,
+    url: "/comment/" + thisId,
     data: {
-      // Value taken from note textarea
-      body: $("#bodyinput").val()
+      
+      author: $("#authorinput").val(),
+      comment: $("#bodyinput").val(),
+      // articleID: thisId
+    
     }
   })
     // With that done
     .then(function(data) {
       // Log the response
-      console.log(data);
+      // console.log(data);
       // Empty the notes section
       $("#comments").empty();
     });
 
   // Also, remove the values entered in the input and textarea for note entry
 
-  $("#bodyinput").val("");
+  $("#old-comments").append('<br>' + $("#bodyinput").val());
+  $("#bodyinput").val("New Comment");
 });
