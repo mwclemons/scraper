@@ -26,11 +26,16 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
+
 // Connect to the Mongo DB
 mongoose.connect("mongodb://user:password1>@ds157956.mlab.com:57956/heroku_29mz33n5", { useNewUrlParser: true });
 
 
 // Routes
+
+app.get("*", function (req, res) {
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
