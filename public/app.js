@@ -80,6 +80,6 @@ $(document).on("click", "#savenote", function() {
 
   // Also, remove the values entered in the input and textarea for note entry
 
-  $("#old-comments").append('<br>' + $("#bodyinput").val());
+  $("#old-comments").append('<br>' + $("#authorinput") + ' said '+ $("#bodyinput").val());
   $("#bodyinput").val("New Comment");
 });
