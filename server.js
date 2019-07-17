@@ -33,9 +33,9 @@ mongoose.connect("mongodb://user:password1>@ds157956.mlab.com:57956/heroku_29mz3
 
 // Routes
 
-app.get("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../public/index.html"));
-});
+// app.get("*", function (req, res) {
+//   res.sendFile(path.join(__dirname, "../public/index.html"));
+// });
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
