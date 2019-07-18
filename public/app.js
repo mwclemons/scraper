@@ -83,3 +83,23 @@ $(document).on("click", "#savenote", function() {
   $("#old-comments").append('<br>' + $("#authorinput") + ' said '+ $("#bodyinput").val());
   $("#bodyinput").val("New Comment");
 });
+
+// When you click the savenote button
+$(document).on("click", "#scrape-button", function() {
+
+  $.ajax({
+    method: "GET",
+    url: "/scrape"
+
+  })
+    // With that done
+  .then(function(data) {
+    location.reload();
+  })
+  .catch(function(err) {
+    // If an error occurred, log it
+    // console.log(err);
+    res.json(err);
+  });
+
+});
