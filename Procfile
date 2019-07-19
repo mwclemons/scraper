@@ -1,4 +1,4 @@
-web: node index.js
+web: node server.js
 
 let port = process.env.PORT;
 if (port == null || port == "") {
